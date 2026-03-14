@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import { ClerkProvider } from '@clerk/nextjs';
+import type { Metadata } from 'next';
+import Navbar from '@/components/Navbar';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "DeltaAlgo Trader — Algorithmic Crypto Trading Platform",
-  description:
-    "Monitor real-time crypto market data, configure automated trading strategies, and execute trades on Delta Exchange Testnet.",
+  title: 'Delta AI Trading',
+  description: 'AI-powered Algorithmic Crypto Trading Platform',
 };
 
 export default function RootLayout({
@@ -13,8 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className="antialiased min-h-screen bg-[#0a0a0f] text-white">
+          <Navbar />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
