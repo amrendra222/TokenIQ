@@ -1,0 +1,52 @@
+# --- Python / FastAPI backend ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+.venv/
+env/
+venv/
+
+backend/.env
+backend/*.log
+backend/logs/
+
+# SQLite DB (local only)
+deltaalgo.db
+
+# --- Node / Next.js frontend ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.next/
+.turbo/
+.vercel/
+
+frontend/.env.local
+frontend/.env.*
+
+# Build outputs
+dist/
+build/
+out/
+
+# --- Editor / OS specific ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+.history/
+
+# Cursor / IDE metadata
+.cursor/
+
