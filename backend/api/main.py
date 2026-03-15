@@ -112,6 +112,15 @@ def stop_bot(bot_id: str):
             return {"message": f"Bot {bot_id} stopped successfully", "bot": bot}
     return {"error": "Bot not found"}
 
+@app.delete("/api/bots/{bot_id}")
+def delete_bot(bot_id: str):
+    global bots_state
+    for i, bot in enumerate(bots_state):
+        if bot["id"] == bot_id:
+            bots_state.pop(i)
+            return {"message": f"Bot {bot_id} deleted successfully"}
+    return {"error": "Bot not found"}
+
 # Simulated News and Social Media Data Pool
 NEWS_HEADLINES = [
     {"source": "CoinDesk", "text": "Federal Reserve hints at future rate cuts, crypto markets surge.", "sentiment": 0.8},

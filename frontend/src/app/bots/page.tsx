@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Play, Square, Activity, Settings2, Plus, ShieldAlert, Cpu } from 'lucide-react';
+import { Bot, Play, Square, Activity, Settings2, Plus, ShieldAlert, Cpu, Trash2 } from 'lucide-react';
 import axios from 'axios';
 
 interface BotConfig {
@@ -67,6 +67,15 @@ export default function BotsPage() {
       fetchBots();
     } catch (error) {
       console.error("Failed to stop bot", error);
+    }
+  };
+
+  const handleDeleteBot = async (botId: string) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/bots/${botId}`);
+      fetchBots();
+    } catch (error) {
+      console.error("Failed to delete bot", error);
     }
   };
 
@@ -212,9 +221,18 @@ export default function BotsPage() {
                        <Square size={16} fill="currentColor" /> Terminate Agent
                      </button>
                   ) : (
-                     <div className="w-full bg-gray-800/50 text-gray-500 font-bold py-3 rounded-xl flex items-center justify-center gap-2 border border-white/5">
-                        Offline
-                     </div>
+                    <div className="flex gap-2">
+                       <div className="flex-1 bg-gray-800/50 text-gray-500 font-bold py-3 rounded-xl flex items-center justify-center gap-2 border border-white/5">
+                          Offline
+                       </div>
+                       <button 
+                         onClick={() => handleDeleteBot(bot.id)}
+                         className="p-3 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl transition-colors"
+                         title="Delete Bot"
+                       >
+                         <Trash2 size={18} />
+                       </button>
+                    </div>
                   )}
               </motion.div>
             ))
