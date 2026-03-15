@@ -24,7 +24,7 @@ export default function DashboardPage() {
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-            Delta AI Engine
+            AlgoTrader
           </h1>
           <p className="text-sm text-gray-400 mt-1 uppercase tracking-widest font-medium">Auto-Trading Terminal</p>
         </motion.div>

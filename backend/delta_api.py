@@ -18,7 +18,7 @@ class DeltaClient:
         })
         
         # Point to testnet if applicable by ccxt, otherwise sandbox
-        self.exchange.set_sandbox_mode(True)
+        self.exchange.set_sandbox_mode(False)
 
     def fetch_market_data(self, symbol: str = 'BTC/USDT', timeframe: str = '1h', limit: int = 100) -> pd.DataFrame:
         """Fetches historical market data and returns a pandas DataFrame."""

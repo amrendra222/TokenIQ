@@ -20,7 +20,7 @@ export default function Navbar() {
               <div className="absolute inset-0 bg-blue-500/20 blur-xl group-hover:bg-blue-400/30 transition-colors" />
             </div>
             <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
-              DeltaAI
+              AlgoTrader
             </span>
           </Link>
 

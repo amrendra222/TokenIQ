@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Delta AI Trading',
+  title: 'AlgoTrader',
   description: 'AI-powered Algorithmic Crypto Trading Platform',
 };
 

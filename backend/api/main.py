@@ -9,6 +9,9 @@ from trading_engine.strategy_parser import StrategyParser
 app = FastAPI(title="AI Algo Crypto Trading API")
 strategy_parser_instance = StrategyParser()
 
+from delta_api import DeltaClient
+delta_client = DeltaClient()
+
 # Setup CORS
 app.add_middleware(
     CORSMiddleware,
@@ -160,6 +163,25 @@ def get_sentiment(asset: str = "BTC/USDT"):
         "timestamp": current_time.strftime("%Y-%m-%d %H:%M:%S")
     }
 
+@app.get("/api/ohlcv")
+def get_ohlcv(asset: str = "BTC/USDT", timeframe: str = "1h", limit: int = 50):
+    """Fetches historical OHLCV data for the chart."""
+    df = delta_client.fetch_market_data(symbol=asset, timeframe=timeframe, limit=limit)
+    if df.empty:
+        return []
+    
+    # Convert to lightweight-charts format
+    result = []
+    for _, row in df.iterrows():
+        result.append({
+            "time": int(row['timestamp'].timestamp()),
+            "open": row['open'],
+            "high": row['high'],
+            "low": row['low'],
+            "close": row['close']
+        })
+    return result
+
 @app.get("/api/multi-agent")
 def get_multi_agent_consensus(asset: str = "BTC/USDT"):
     # Simulated Agent logic
@@ -279,16 +301,31 @@ async def websocket_endpoint(websocket: WebSocket):
 async def market_data_simulator():
     """Background task to simulate pushing market data to the dashboard continually."""
     while True:
-        # In a real scenario, this gets data from decision_engine / delta_api
-        dummy_data = {
-            "type": "MARKET_UPDATE",
-            "symbol": "BTC/USDT",
-            "price": 65000 + (asyncio.get_event_loop().time() % 100),
-            "prediction": "Buy",
-            "confidence": 0.85,
-            "risk_level": "Low"
-        }
-        await manager.broadcast(json.dumps(dummy_data))
+        try:
+            # Fetch real price from Delta
+            ticker = delta_client.exchange.fetch_ticker('BTC/USDT')
+            real_price = ticker['last']
+            
+            dummy_data = {
+                "type": "MARKET_UPDATE",
+                "symbol": "BTC/USDT",
+                "price": real_price,
+                "prediction": random.choice(["Buy", "Hold", "Sell"]),
+                "confidence": round(random.uniform(0.7, 0.95), 2),
+                "risk_level": random.choice(["Low", "Medium"])
+            }
+            await manager.broadcast(json.dumps(dummy_data))
+        except Exception as e:
+            print(f"Error in market simulator: {e}")
+            # Fallback if API fails
+            await manager.broadcast(json.dumps({
+                "type": "MARKET_UPDATE",
+                "symbol": "BTC/USDT",
+                "price": 71000 + random.uniform(-10, 10),
+                "prediction": "Hold",
+                "confidence": 0.5,
+                "risk_level": "N/A"
+            }))
         
         # Simulate active bots trading
         for bot in bots_state:
